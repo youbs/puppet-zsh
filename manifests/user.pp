@@ -1,4 +1,8 @@
-define zsh::user($ensure=present, $path="/usr/bin/zsh") {
+define zsh::user(
+  $ensure = present,
+  $path   = "/usr/bin/zsh",
+  $source = ""
+  ) {
 
   exec { "chsh -s $path $name":
     unless => "grep -E '^${name}.+:${$path}$' /etc/passwd",
@@ -6,9 +10,18 @@ define zsh::user($ensure=present, $path="/usr/bin/zsh") {
 
   if $name != "root" {
     file { "/home/${name}/.zshrc":
-      ensure => directory,
-      owner => $name,
-      group => $name,
+      source => $source,
+      owner  => $name,
+      group  => $name,
+      ensure => file,
     }
   }
+
+  if $name == "root" {
+    file { "/root/.zshrc":
+      source => $source,
+      ensure => file,
+    }
+  }
+
 }
