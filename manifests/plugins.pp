@@ -7,5 +7,5 @@ class zsh::plugins {
     mode => 644,
     ignore => '.git',
     require => Package['vim','zsh'],
-  }  
+  }
 }
